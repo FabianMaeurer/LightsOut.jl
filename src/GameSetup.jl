@@ -20,7 +20,7 @@ function build_blocks()
     global game_border = Rect(WIDTH + 300 - 620, HEIGHT - 520,1240 - off_set, 1240 - off_set)
 
 
-    block_coordinates = [(x,y) for x ∈ WIDTH + 300 - 590:block_width + 10:WIDTH + 300 + 570, y ∈ HEIGHT - 490:block_width + 10:HEIGHT + 570]
+    block_coordinates = [(x,y) for x ∈ WIDTH + 300 - 590:block_width + 10:WIDTH + 900 - off_set - block_width, y ∈ HEIGHT - 490:block_width + 10:HEIGHT + 700 - off_set - block_width]
 
     global blocks = [Rect(x,y,block_width, block_width) for (x,y) ∈ block_coordinates]
 end
