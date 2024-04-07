@@ -1,5 +1,6 @@
 # LightsOut.jl
 
+
 A light demo package to showcase the combinatorial game "Lights Out" on an n-by-n played on simple manifolds like the torus, kleinian bottle or the projective plane.
 
 We want to play the classic game [Lights Out](https://en.wikipedia.org/wiki/Lights_Out_(game)) on different kinds of manifolds and solve the game in those cases. The main feature of this package is a graphical interface to play the game on such surfaces.
