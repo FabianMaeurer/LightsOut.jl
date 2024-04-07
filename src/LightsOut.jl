@@ -18,7 +18,7 @@ include("Math.jl")
 
 
 function play_lights_out()
-    rungame("src/GameSetup.jl")
+    rungame(joinpath(@__DIR__, "GameSetup.jl"))
 end
 
 end

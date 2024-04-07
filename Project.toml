@@ -3,6 +3,9 @@ uuid = "6785253c-d9b4-44f8-80e6-06aa2e3ea584"
 authors = ["fabianmaeurer <fabianmaeurer@gmail.com>"]
 version = "0.1.0"
 
+[compat]
+julia = "1.8,1.9,1.10"
+
 [deps]
 Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
 GameZero = "9da27670-f782-11e9-1da1-f53579315bfe"

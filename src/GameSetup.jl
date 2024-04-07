@@ -12,7 +12,7 @@ global SETTINGS = Dict(:surface => :square,
                         :surface_index => 1, 
                         :n => 5,
                         :solution => nothing,
-                        :show_solution => true,
+                        :show_solution => false,
                         :solved => false)
 
 global TEMP_SETTINGS = SETTINGS
