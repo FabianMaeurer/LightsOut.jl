@@ -1,4 +1,6 @@
-using LightsOut.Math
+using LightsOut.Math, LightsOut.GameZero
+
+@show pwd()
 
 BACKGROUND = "torus_background.jpg"
 #BACKGROUND = colorant"black"
