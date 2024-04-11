@@ -16,7 +16,6 @@ include("adjacency.jl")
 include("Solving.jl")
 include("Math.jl")
 
-@show pwd()
 
 function play_lights_out()
     rungame(joinpath(@__DIR__, "GameSetup.jl"))

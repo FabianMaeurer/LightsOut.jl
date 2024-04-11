@@ -15,7 +15,8 @@ global SETTINGS = Dict(:surface => :square,
                         :n => 5,
                         :solution => nothing,
                         :show_solution => false,
-                        :solved => false)
+                        :solved => false,
+                        :edit => false)
 
 global TEMP_SETTINGS = SETTINGS
 
@@ -85,8 +86,15 @@ help_button = Rect(game_grid.right + 60, game_grid.top, 200, 200)
 help_button_border = Rect(help_button.left - 10, help_button.top - 10, 220, 220)
 help_button_text = TextActor("?", "moonhouse", font_size = 90, center = help_button.center)
 
+edit_button = Rect(game_grid.right + 60, game_grid.top + 220, 200, 200)
+edit_button_border = Rect(edit_button.left - 10, edit_button.top - 10, 220, 220)
+edit_button_text = TextActor("Edit", "moonhouse", font_size = 60, center = edit_button.center)
+
 #Victory TextActor
 victory_text = TextActor("Victory!", "moonhouse", font_size = 250, center = game_grid.center)
+
+# Not solveable text
+not_solveable_text = TextActor("No Solution", "moonhouse", font_size = 180, center = game_grid.center)
 
 function draw()
     draw(title_actor)
@@ -104,12 +112,17 @@ function draw()
 
     # Draw solution indicators
     if SETTINGS[:show_solution]
-        for (ind,s) ∈ pairs(sol_indecs)
-            if SETTINGS[:solution][Tuple(ind)...]
-                draw(s, colorant"lightsalmon", fill = true)
+        if SETTINGS[:solution] === nothing
+            draw(not_solveable_text)
+        else
+            for (ind,s) ∈ pairs(sol_indecs)
+                if SETTINGS[:solution][Tuple(ind)...]
+                    draw(s, colorant"lightsalmon", fill = true)
+                end
             end
         end
     end
+
 
     #draw Buttons for grid size
     for (B,b,n) ∈ zip(n_buttons, n_buttons_border, n_buttons_numbers)
@@ -150,8 +163,13 @@ function draw()
     draw(help_button, colorant"slategrey", fill = true)
     draw(help_button_text)
 
+    # Edit button
+    draw(edit_button_border, SETTINGS[:edit] ? colorant"red" : colorant"gray12", fill = true)
+    draw(edit_button, colorant"slategrey", fill = true)
+    draw(edit_button_text)
+
     # Draw victory
-    if SETTINGS[:solved] 
+    if sum(config) == 0
         draw(victory_text)
     end
 end
@@ -170,9 +188,36 @@ function on_mouse_down(g::Game, pos, button)
     end
 
     if collide(help_button, (x,y))
-        SETTINGS[:show_solution] = SETTINGS[:show_solution] ⊻ true
+        SETTINGS[:show_solution] ⊻= true
+        if SETTINGS[:show_solution] && SETTINGS[:edit] 
+            SETTINGS[:edit] = false
+            solveable, solution = is_solvable(config, SETTINGS[:surface])
+            
+            SETTINGS[:solution] = solveable ? vector_to_grid(solution,SETTINGS[:n]) : nothing
+        end
         return 
     end
+
+    if collide(edit_button, (x,y))
+        if SETTINGS[:edit]
+            solveable, solution = is_solvable(config, SETTINGS[:surface])
+            
+            SETTINGS[:solution] = solveable ? vector_to_grid(solution,SETTINGS[:n]) : nothing
+        end
+        SETTINGS[:show_solution] = false
+        SETTINGS[:edit] ⊻= true
+    end
+
+    if SETTINGS[:edit]
+        on_mouse_down_edit(pos)
+    else
+        on_mouse_down_grid(pos)
+    end
+
+end
+
+function on_mouse_down_grid(pos)
+    x,y = 2 .* pos
 
     ind = findfirst(a -> collide(a, (x,y)), blocks)
 
@@ -188,6 +233,18 @@ function on_mouse_down(g::Game, pos, button)
     if sum(config) == 0
         SETTINGS[:solved] = true
     end
+end
+
+function on_mouse_down_edit(pos)
+    x,y = 2 .* pos
+
+    ind = findfirst(a -> collide(a, (x,y)), blocks)
+
+    ind === nothing && return 
+
+    i,j = Tuple(ind)
+
+    config[i,j] ⊻= true
 end
 
 
